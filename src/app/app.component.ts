@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Email } from './models/email';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +7,23 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'cmail';
+
+  private _isEmailOpen = false;
+
+  email: Email = new Email();
+
+  get isEmailOpen(){
+    return this._isEmailOpen;
+  }
+ 
+  toggleEmailForm(){
+    this._isEmailOpen = !this.isEmailOpen
+  }
+
+  enviarEmail(eventoSubmit: Event){
+
+    eventoSubmit.preventDefault();
+    console.log(this.email);
+  }
+
 }
