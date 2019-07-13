@@ -3,26 +3,34 @@
   <main class="mdl-layout__content">
     <div class="page-content">
       <div class="mdl-grid">
-        <form>
+        <form [formGroup]="formCadastro" (ngSubmit)="cadastrar()">
 
-          <cmail-form-group label="Nome" idCampo="nome">
-            <input type="text" name="nome" cmailFormField>
+          <cmail-form-group
+              label="Nome"
+              idCampo="nome"
+              [validation]="formCadastro.get('nome').invalid && formCadastro.get('nome').touched">
+            <input #nome required formControlName="nome" type="text" name="nome" cmailFormField>
             <span class="mdl-textfield__error">Informar um nome é obrigatório!</span>
           </cmail-form-group>
 
           <cmail-form-group label="Username" idCampo="username">
-            <input type="text" name="username" cmailFormField>
+            <input required formControlName="username" type="text" name="username" cmailFormField>
             <span class="mdl-textfield__error">Informar um username é obrigatório!</span>
           </cmail-form-group>
 
           <cmail-form-group label="Senha" idCampo="senha">
-            <input type="password" name="senha" cmailFormField>
+            <input required formControlName="senha" type="password" name="senha" cmailFormField>
             <span class="mdl-textfield__error">Informar uma senha é obrigatório!</span>
           </cmail-form-group>
 
           <cmail-form-group label="Avatar" idCampo="avatar">
-            <input type="text" name="avatar" cmailFormField>
+            <input required formControlName="avatar" type="text" name="avatar" cmailFormField>
             <span class="mdl-textfield__error">Informar um avatar é obrigatório!</span>
+          </cmail-form-group>
+
+          <cmail-form-group label="Telefone" idCampo="telefone">
+            <input required formControlName="telefone" type="text" name="telefone" cmailFormField>
+            <span class="mdl-textfield__error">Informar um telefone é obrigatório!</span>
           </cmail-form-group>
 
           <div class="mdl-card__actions">
