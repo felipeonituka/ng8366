@@ -7,17 +7,24 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'cmail-cadastro',
   templateUrl: './cadastro.component.html',
-  styles: []
+  styles: [`
+    .mdl-grid {
+      flex-direction: column;
+    }
+
+  `]
 })
 export class CadastroComponent implements OnInit {
 
   formCadastro = new FormGroup({
     nome: new FormControl('', Validators.required),
     username: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    senha: new FormControl('', Validators.required),
+    senha: new FormControl('', [Validators.required, Validators.minLength(4)]),
     avatar: new FormControl('', Validators.required),
-    telefone: new FormControl('', Validators.required),
+    telefone: new FormControl('', [Validators.required, Validators.pattern('[0-9]{4}-?[0-9]{4}[0-9]?')]),
   })
+
+  msgErro = '';
 
   constructor(private http: HttpClient
               ,private roteador: Router) {}
@@ -28,6 +35,7 @@ export class CadastroComponent implements OnInit {
   cadastrar(){
 
     if(this.formCadastro.invalid){
+      this.formCadastro.markAllAsTouched();
       console.error('formulário invalidoo preencha tudoooo');
       return
     }
@@ -40,7 +48,10 @@ export class CadastroComponent implements OnInit {
          (userApi: any) => {
             this.roteador.navigate(['login', userApi.name])
           }
-         ,erro => console.error(erro)
+         ,erro => {
+           this.msgErro = 'Oops algo errado aconteceu tente mais tarde'
+           console.error(erro)
+          }
         );
 
   }
