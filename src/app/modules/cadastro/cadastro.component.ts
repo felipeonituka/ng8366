@@ -34,15 +34,21 @@ export class CadastroComponent implements OnInit {
 
   validaImagem(controle: FormControl){
 
+    const urlInvalida = {urlInvalida: true}
+
     return this.http
                 .head(controle.value,{observe: 'response'})
                 .pipe(
                   map((resposta: HttpResponseBase) => {
-                    return true
+
+                    if(resposta.headers.get('Content-Type').includes('image')){
+                      return resposta.ok
+                    } else {
+                      return urlInvalida
+                    }
+
                   })
-                  ,catchError((httpError)=>{
-                    return [{urlInvalida: true}]
-                  })
+                  , catchError(() => [urlInvalida])
                 )
 
   }
@@ -61,7 +67,7 @@ export class CadastroComponent implements OnInit {
         .post('http://localhost:3200/users',dtoUser)
         .subscribe(
          (userApi: any) => {
-            this.roteador.navigate(['login', userApi.name])
+            this.roteador.navigate(['login', userApi.username])
           }
          ,erro => {
            this.msgErro = `${erro.statusText}: Oops algo errado aconteceu tente mais tarde. ${erro.status}`
