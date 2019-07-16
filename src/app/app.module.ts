@@ -13,9 +13,6 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   imports: [
     BrowserModule,
-    CadastroModule,
-    CaixaDeEntradaModule,
-    LoginModule,
     AppRoutingModule
   ],
   providers: [],
