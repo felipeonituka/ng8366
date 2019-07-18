@@ -65,7 +65,7 @@ export class CadastroComponent implements OnInit {
     this.servico
         .cadastrar(this.formCadastro.value)
         .subscribe(
-         (userOutput) => this.roteador.navigate(['login', userOutput.username])
+         user => this.roteador.navigate(['login', user.usuario])
          ,erro => this.msgErro = `${erro.statusText}: Oops algo errado aconteceu tente mais tarde. ${erro.status}`
         );
 

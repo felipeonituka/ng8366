@@ -5,6 +5,7 @@ import { UserInput } from '../models/dto/user-input';
 import { Observable } from 'rxjs';
 import { UserOutput } from '../models/dto/user-output';
 import { map } from 'rxjs/operators';
+import { User } from '../models/user';
 
 @Injectable()
 export class UserService {
@@ -13,14 +14,18 @@ export class UserService {
 
   constructor(private http: HttpClient){}
 
-  cadastrar(dadosForm): Observable<UserOutput> {
+  cadastrar(dadosForm): Observable<User> {
 
     const dtoUser = new UserInput(dadosForm);
 
-    return this.http.post(this.url,dtoUser)
-                    .pipe(
-                      map((userApi:any) => new UserOutput(userApi))
-                    )
+    return this.http
+                .post<UserOutput>(this.url,dtoUser)
+                .pipe(
+                  map(userApi => ({
+                    nome: userApi.name,
+                    usuario: userApi.username
+                  }))
+                )
   }
 
 }
