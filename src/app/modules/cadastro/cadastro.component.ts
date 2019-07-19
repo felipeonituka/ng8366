@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { HttpClient, HttpResponseBase } from '@angular/common/http';
-import { UserInput } from 'src/app/models/dto/user-input';
 import { Router } from '@angular/router';
 import { map, catchError } from 'rxjs/operators';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'cmail-cadastro',
@@ -28,21 +28,28 @@ export class CadastroComponent implements OnInit {
   msgErro = '';
 
   constructor(private http: HttpClient
+              ,private servico: UserService
               ,private roteador: Router) {}
 
   ngOnInit() {}
 
   validaImagem(controle: FormControl){
 
+    const urlInvalida = {urlInvalida: true}
+
     return this.http
                 .head(controle.value,{observe: 'response'})
                 .pipe(
                   map((resposta: HttpResponseBase) => {
-                    return true
+
+                    if(resposta.headers.get('Content-Type').includes('image')){
+                      return resposta.ok
+                    } else {
+                      return urlInvalida
+                    }
+
                   })
-                  ,catchError((httpError)=>{
-                    return [{urlInvalida: true}]
-                  })
+                  , catchError(() => [urlInvalida])
                 )
 
   }
@@ -55,17 +62,11 @@ export class CadastroComponent implements OnInit {
       return
     }
 
-    const dtoUser = new UserInput(this.formCadastro.value)
-
-    this.http
-        .post('http://localhost:3200/users',dtoUser)
+    this.servico
+        .cadastrar(this.formCadastro.value)
         .subscribe(
-         (userApi: any) => {
-            this.roteador.navigate(['login', userApi.name])
-          }
-         ,erro => {
-           this.msgErro = `${erro.statusText}: Oops algo errado aconteceu tente mais tarde. ${erro.status}`
-          }
+         user => this.roteador.navigate(['login', user.usuario])
+         ,erro => this.msgErro = `${erro.statusText}: Oops algo errado aconteceu tente mais tarde. ${erro.status}`
         );
 
   }
