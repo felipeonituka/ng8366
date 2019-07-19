@@ -10,15 +10,25 @@ import { EmailService } from 'src/app/services/email.service';
 })
 export class CaixaDeEntradaComponent implements OnInit {
 
-  constructor(private servico: EmailService) { }
-
-  ngOnInit() {
-  }
-
   private _isEmailOpen = false;
   listaEmails = [];
 
   email: Email = new Email({destinatario: '', assunto: '', conteudo: ''});
+
+  constructor(private servico: EmailService) { }
+
+  ngOnInit() {
+    this.carregarEmails();
+  }
+
+  carregarEmails(){
+    this.servico
+        .carregar()
+        .subscribe(
+          listaEmailsApi => this.listaEmails = listaEmailsApi
+          ,erro => console.log(erro)
+        )
+  }
 
   get isEmailOpen(){
     return this._isEmailOpen;
@@ -36,14 +46,11 @@ export class CaixaDeEntradaComponent implements OnInit {
       return
     }
 
-    //let novoEmail = new Email(this.email);
-
     this.servico
         .enviar(this.email)
         .subscribe(
-          (resposta) => {
-            console.log(resposta);
-            this.listaEmails.push(this.email);
+          () => {
+            this.carregarEmails();
             formEmail.resetForm();
             this.toggleEmailForm();
           }
