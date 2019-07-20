@@ -6,9 +6,11 @@ import { SharedComponentsModule } from 'src/app/components/shared-components.mod
 import { CaixaDeEntradaRoutingModule } from './caixa-de-entrada-routing.module';
 import { EmailService } from 'src/app/services/email.service';
 import { HttpClientModule } from '@angular/common/http';
+import { PageDataService } from 'src/app/services/page-data.service';
+import { FiltroEmailPipe } from './filtro-email.pipe';
 
 @NgModule({
-  declarations: [CaixaDeEntradaComponent],
+  declarations: [CaixaDeEntradaComponent, FiltroEmailPipe],
   exports: [CaixaDeEntradaComponent],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    EmailService
+    EmailService,
+    PageDataService
   ]
 })
 export class CaixaDeEntradaModule { }

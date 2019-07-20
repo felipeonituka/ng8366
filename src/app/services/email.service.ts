@@ -58,4 +58,8 @@ export class EmailService {
                 )
   }
 
+  deletar(id: string): Observable<Object> {
+    return this.http.delete(`${this.url}/${id}`, this.headersAuth)
+  }
+
 }
