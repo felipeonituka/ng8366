@@ -6,8 +6,6 @@ export class Email {
     dataEnvio = '';
     remetente = '';
 
-
-    //object destructuring
     constructor({destinatario, assunto, conteudo}){
         this.destinatario = destinatario;
         this.assunto = assunto;
